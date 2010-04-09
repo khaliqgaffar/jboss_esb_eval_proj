@@ -1,0 +1,5 @@
+<jbossesb-deployment>
+  <depends>jboss.esb:deployment=soap.esb</depends>
+  <depends>jboss.esb:service=SoapUIClientService</depends>
+  <depends>jboss.esb.quickstart.destination:service=Queue,name=webserviceQ</depends>
+</jbossesb-deployment>

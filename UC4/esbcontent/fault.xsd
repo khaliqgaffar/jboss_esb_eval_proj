@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.tibco.com/schemas/SAMPLEXML/Schema.xsd3"
+	 targetNamespace="http://www.tibco.com/schemas/SAMPLEXML/Schema.xsd3"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="fault">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="code"/>
+				<xs:element ref="faultString"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="code" type="xs:string"/>
+	<xs:element name="faultString" type="xs:string"/>
+</xs:schema>

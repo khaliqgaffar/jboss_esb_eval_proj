@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<jbossesb parameterReloadSecs="5"
+ xmlns="http://anonsvn.labs.jboss.com/labs/jbossesb/trunk/product/etc/schemas/xml/jbossesb-1.2.0.xsd"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://anonsvn.labs.jboss.com/labs/jbossesb/trunk/product/etc/schemas/xml/jbossesb-1.2.0.xsd http://anonsvn.jboss.org/repos/labs/labs/jbossesb/trunk/product/etc/schemas/xml/jbossesb-1.2.0.xsd">
+ <providers>
+  <jms-provider connection-factory="ConnectionFactory" name="auditReiver">
+   <jms-bus busid="auditLogs">
+    <jms-message-filter dest-name="queue/test" dest-type="QUEUE"/>
+   </jms-bus>
+  </jms-provider>
+ </providers>
+ <services>
+  <service category="esbservice" description="sasdad" invmScope="GLOBAL" name="printer">
+   <listeners>
+    <jms-listener busidref="auditLogs" is-gateway="true" name="jmsListener"/>
+   </listeners>
+   <actions mep="OneWay">
+    <action class="com.emirates.DisplayMessage" name="printMessage" process="printMessage"/>
+   </actions>
+  </service>
+ </services>
+</jbossesb>

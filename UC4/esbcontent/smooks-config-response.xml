@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" xmlns:ftl="http://www.milyn.org/xsd/smooks/freemarker-1.1.xsd" xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.2.xsd">
+  <params>
+    <param name="stream.filter.type">SAX</param>
+    <param name="inputType">input.java</param>
+    <param name="input.java" type="input.type.actived">com.emirates.model.ResponseDTO</param>
+  </params>
+  <jb:bean beanId="responseDTO" class="com.emirates.model.ResponseDTO" createOnElement="com.emirates.model.ResponseDTO">
+    <jb:value data="com.emirates.model.ResponseDTO" property="status"/>
+  </jb:bean>
+  <ftl:freemarker applyOnElement="#document">
+    <ftl:template><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<ns0:shortFinalResponse xmlns:ns0="http://www.tibco.com/schemas/SAMPLEXML/Schema.xsd2">
+    <ns0:status>${responseDTO.status!?string}</ns0:status>    
+</ns0:shortFinalResponse>]]></ftl:template>
+    <param name="rootElementName">shortFinalResponse</param>
+    <param name="modelSrc">Workspace://UC4/esbcontent/response.xsd</param>
+    <param name="modelSrcType">XSD</param>
+    <param name="messageType">XML</param>
+  </ftl:freemarker>
+</smooks-resource-list>

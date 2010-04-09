@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.tibco.com/schemas/SAMPLEXML/Schema.xsd"
+	 targetNamespace="http://www.tibco.com/schemas/SAMPLEXML/Schema.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="shortFinalRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="flightNo"/>
+				<xs:element ref="flightDates"/>
+				<xs:element ref="ShortFinals"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="flightNo" type="xs:string"/>
+	<xs:element name="flightDates" type="xs:string"/>
+	<xs:element name="ShortFinals" type="xs:string"/>
+</xs:schema>

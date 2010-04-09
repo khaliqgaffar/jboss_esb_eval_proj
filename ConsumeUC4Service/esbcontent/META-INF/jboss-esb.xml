@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<jbossesb parameterReloadSecs="5"
+ xmlns="http://anonsvn.labs.jboss.com/labs/jbossesb/trunk/product/etc/schemas/xml/jbossesb-1.2.0.xsd"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://anonsvn.labs.jboss.com/labs/jbossesb/trunk/product/etc/schemas/xml/jbossesb-1.2.0.xsd http://anonsvn.jboss.org/repos/labs/labs/jbossesb/trunk/product/etc/schemas/xml/jbossesb-1.2.0.xsd">
+ <providers>
+  <jms-provider connection-factory="ConnectionFactory" name="incomingReciver">
+   <jms-bus busid="incomingChannel">
+    <jms-message-filter dest-name="queue/webserviceQ" dest-type="QUEUE"/>
+   </jms-bus>
+  </jms-provider>
+ </providers>
+ <services>
+  <service category="com.emirates" description="uc4 service consumer"
+   invmScope="GLOBAL" name="serviceConsumer">
+   <listeners>
+    <jms-listener busidref="incomingChannel" is-gateway="true" name="incomingListener"/>
+   </listeners>
+   <actions mep="OneWay">
+    <action class="com.emirates.PrepareRequestMessage"
+     name="requestMapper" process="preapreRequest"/>
+    <action class="org.jboss.soa.esb.actions.SystemPrintln" name="printPreparedRequest">
+     <property name="message" value="Prepared Request Before Calling Service"/>
+     <property name="printfull" value="true"/>
+    </action>
+    <action class="org.jboss.soa.esb.actions.soap.SOAPClient" name="callUC4Service">
+     <property name="wsdl" value="http://localhost:8080/UC4/ebws/com.emirates/shortFinalService?wsdl"/>
+     <property name="operation" value="shortFinalServiceOp"/>
+     <property name="SOAPAction" value="shortFinalServiceOp"/>
+     <property name="responseAsOgnlMap" value="true"/>
+    </action>
+    <action class="org.jboss.soa.esb.actions.SystemPrintln" name="printResponse">
+     <property name="message" value="Response"/>
+     <property name="printfull" value="true"/>
+    </action>
+   </actions>
+  </service>
+ </services>
+</jbossesb>

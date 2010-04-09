@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<jbossesb parameterReloadSecs="5"
+ xmlns="http://anonsvn.labs.jboss.com/labs/jbossesb/trunk/product/etc/schemas/xml/jbossesb-1.2.0.xsd"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://anonsvn.labs.jboss.com/labs/jbossesb/trunk/product/etc/schemas/xml/jbossesb-1.2.0.xsd http://anonsvn.jboss.org/repos/labs/labs/jbossesb/trunk/product/etc/schemas/xml/jbossesb-1.2.0.xsd">
+ <providers>
+  <sql-provider driver="oracle.jdbc.OracleDriver" name="auditLogSniffer"
+   password="temp123" url="jdbc:oracle:thin:@hqlinuxdevbl64:1526:FOSSD" username="soa_ownr">
+   <sql-bus busid="auditSniffer">
+    <sql-message-filter message-column="message"
+     message-id-column="AUDIT_ID" order-by="AUDIT_ID"
+     post-delete="false" status-column="AUDIT_STATUS" tablename="soa_tibco_audit_log"/>
+   </sql-bus>
+  </sql-provider>
+ </providers>
+ <services>
+  <service category="jbossEsb" description="jbossEsb" invmScope="GLOBAL" name="pushtoQ">
+   <listeners>
+    <sql-listener busidref="auditSniffer" is-gateway="true"
+     name="auditSnifferListener" poll-frequency-seconds="10"/>
+   </listeners>
+   <actions mep="OneWay">
+    <action class="org.jboss.soa.esb.actions.SystemPrintln" name="printAuditMessage">
+     <property name="message" value="Incoming Service Id :"/>
+    </action>
+    <action class="com.emirates.DisplayAndConvertDBMessage"
+     name="customDisplayMessage" process="displayMessage"/>
+    <action class="org.jboss.soa.esb.actions.routing.JMSRouter" name="LogMessageToMQServer">
+     <property name="jndi-context-factory" value="com.ibm.mq.jms.context.WMQInitialContextFactory"/>
+     <property name="jndi-URL" value="ITSUN108:1417/CLI00.BRSDEV"/>
+     <property name="connection-factory" value="BRSDEV"/>
+     <property name="unwrap" value="true"/>
+     <property name="jndiName" value="FUSE.TEST"/>
+    </action>
+    <action class="org.jboss.soa.esb.actions.routing.JMSRouter" name="tibcoAuditLog">
+     <property name="jndi-context-factory" value="org.jnp.interfaces.NamingContextFactory"/>
+     <property name="jndi-URL" value="127.0.0.1:1099"/>
+     <property name="jndi-pkg-prefix" value="org.jboss.naming:org.jnp.interfaces"/>
+     <property name="unwrap" value="true"/>
+     <property name="jndiName" value="queue/test"/>
+    </action>
+   </actions>
+  </service>
+ </services>
+</jbossesb>

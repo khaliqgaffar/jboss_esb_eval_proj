@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.2.xsd">
+  <params>
+    <param name="stream.filter.type">SAX</param>
+    <param name="inputType">input.xml</param>
+    <param name="input.xml" type="input.type.actived">File:/C:\Documents and Settings\s726580\Desktop\ESB POC\request.xml</param>
+  </params>
+  <jb:bean beanId="RequestDTO" class="com.emirates.model.RequestDTO" createOnElement="shortFinalRequest">
+    <jb:value data="/shortFinalRequest/flightDates" property="flightDates"/>
+    <jb:value data="/shortFinalRequest/flightNo" property="flightNo"/>
+    <jb:value data="/shortFinalRequest/ShortFinals" property="shortFinals"/>
+  </jb:bean>
+</smooks-resource-list>

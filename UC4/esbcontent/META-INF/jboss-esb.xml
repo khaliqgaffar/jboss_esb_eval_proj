@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<jbossesb parameterReloadSecs="5"
+ xmlns="http://anonsvn.labs.jboss.com/labs/jbossesb/trunk/product/etc/schemas/xml/jbossesb-1.2.0.xsd"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://anonsvn.labs.jboss.com/labs/jbossesb/trunk/product/etc/schemas/xml/jbossesb-1.2.0.xsd http://anonsvn.jboss.org/repos/labs/labs/jbossesb/trunk/product/etc/schemas/xml/jbossesb-1.2.0.xsd">
+ <providers>
+  <http-provider name="shortFinalsWebServiceProvider">
+   <http-bus busid="shortFinalProviderChannel"/>
+  </http-provider>
+ </providers>
+ <services>
+  <service category="com.emirates" description="ShortFinalService"
+   invmScope="GLOBAL" name="shortFinalService">
+   <listeners>
+    <http-gateway busidref="shortFinalProviderChannel"
+     name="shortFinalListener" payloadAs="STRING"/>
+   </listeners>
+   <actions inXsd="request.xsd" mep="RequestResponse"
+    outXsd="response.xsd" webservice="true">
+    <action class="org.jboss.soa.esb.actions.SystemPrintln" name="printIncomingSoapMessage">
+     <property name="message" value="Print Message::"/>
+    </action>
+    <action class="org.jboss.soa.esb.smooks.SmooksAction" name="requestTransformer">
+     <property name="smooksConfig" value="/smooks-config.xml"/>
+     <property name="resultType" value="JAVA"/>
+    </action>
+    <action class="com.emirates.ResponseForIncomingRequest"
+     name="sendResponseBack" process="validateFromSmooks"/>
+    <action class="org.jboss.soa.esb.actions.SystemPrintln" name="printResponseMessage">
+     <property name="message" value="Response Message :"/>
+    </action>
+    <action class="com.emirates.ObjectToXStream" name="transformPojoToXml">
+     <property name="aliases">
+      <alias class="com.emirates.model.ResponseDTO" name="shortFinalResponse"/>
+     </property>
+     <property name="defaultPrefix" value="sch"/>
+     <property name="defaultNameSpace" value="http://www.tibco.com/schemas/SAMPLEXML/Schema.xsd2"/>
+     
+     <property name="namespaces">
+      <namespace local-part="sch" namespace-uri="http://www.tibco.com/schemas/SAMPLEXML/Schema.xsd2"/>
+      <!--namespace local-part="shortFinalResponse" namespace-uri="http://www.tibco.com/schemas/SAMPLEXML/Schema.xsd2/shortFinalResponse"/>
+      <namespace local-part="status" namespace-uri="http://www.tibco.com/schemas/SAMPLEXML/Schema.xsd2/status"/-->
+     </property>
+     
+    </action>
+    <!-- action class="org.jboss.soa.esb.smooks.SmooksAction" name="transformResponse">
+     <property name="smooksConfig" value="/smooks-config-response.xml"/>
+     <property name="resultType" value="STRING"/>
+     <property name="javaResultBeanId" value="responseDTO"/>
+    </action-->
+    <action class="org.jboss.soa.esb.actions.SystemPrintln" name="printAfterTransformation">
+     <property name="message" value="After Transform :"/>
+    </action>
+   </actions>
+  </service>
+ </services>
+</jbossesb>
